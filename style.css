@@ -177,6 +177,7 @@ The ruler is centred below the case and remains separate from it.
 The gap leaves space for a speed label in later prototypes.*/
 
 .ruler-stage {
+    --speed-position: 50%;
     position: absolute;
     left: 50%;
     top: 45%;
@@ -294,4 +295,19 @@ with the page. Clicking Start provides that first interaction.
     background: #f4c17e;
     color: #553c4b;
     font: bold 1.1rem Arial, sans-serif;
+}
+
+/*Create a dot which shows position on the ruler controls the speed. */
+.ruler-stage::after {
+    position: absolute;
+    content: "";
+    left: var(--speed-position, 50%);
+    top: 18%;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgb(28, 74, 113);
+    border-radius: 50%;
+    background: #ffffff;
+    transform: translateX(-50%);
+    pointer-events: none;
 }
