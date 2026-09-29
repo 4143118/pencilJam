@@ -34,7 +34,6 @@ let currentStep = 0;
 
 //the time between two steps can be changed by the ruler
 let stepDuration = 250;
-let lastStepTime = 0;
 
 // Keep the visible part of each image inside the CSS asset window.
 // Create the image and its wrapper together, so the same code can be reused for different
@@ -285,7 +284,6 @@ document.addEventListener("pointercancel", endGesture);
  * The eraser must also be dragged into a slot.
  */
 
-//Start the six-step sound loop after the first user interaction.
 function startAudio() {
     if (!audioContext) {
         audioContext = new AudioContext();
@@ -297,6 +295,7 @@ function startAudio() {
 
     if (audioTimer !== null) return;
 
+    // Play each step using the speed selected on the ruler.
     audioTimer = setInterval(() => {
         if (audioContext.state !== "running") return;
 
@@ -313,46 +312,9 @@ function startAudio() {
             }
         });
 
-// Start the six-step loop after the first user interaction.
-        function startAudio() {
-            if (!audioContext) {
-                audioContext = new AudioContext();
-            }
-
-            if (audioContext.state === "suspended") {
-                audioContext.resume();
-            }
-
-            if (audioTimer !== null) return;
-
-            audioTimer = setInterval(() => {
-                if (audioContext.state !== "running") return;
-
-                // Read the current speed before playing the next step.
-                const now = performance.now();
-                if (now - lastStepTime < stepDuration) return;
-                lastStepTime = now;
-
-                slots.forEach((slot) => {
-                    if (
-                        Number(slot.dataset.step) === currentStep &&
-                        slot.dataset.pencil
-                    ) {
-                        playSound(
-                            slot.dataset.pencil,
-                            slot.dataset.length,
-                            currentStep
-                        );
-                    }
-                });
-
-                currentStep = (currentStep + 1) % 6;
-            }, 20);
-        }
         currentStep = (currentStep + 1) % 6;
-    }, 250);
+    }, stepDuration);
 }
-
 //Give each colour a different sound and each length a different volume.
 //cuz this is the prototype stage, I just use code to make some noise
 //I will change it at the later stage
@@ -474,6 +436,14 @@ document.addEventListener("mouseup", (event) => {
         stepDuration = 400 - amount * 300;
         ruler.style.setProperty("--speed-position", `${amount * 100}%`);
     }
-
+// The old interval keeps its original speed, so replace it.
+    clearInterval(audioTimer);
+    audioTimer = null;
+    startAudio();
     rulerDrag = null;
 });
+
+// I used ChatGPT to help implement the ruler's speed control.
+// While debugging, I found that changing stepDuration alone did not
+// change the music's speed. setInterval keeps the delay it was created
+// with, so I clear the old loop and start a new one after releasing the ruler.
