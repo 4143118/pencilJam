@@ -32,6 +32,10 @@ let audioContext = null;
 let audioTimer = null;
 let currentStep = 0;
 
+//the time between two steps can be changed by the ruler
+let stepDuration = 250;
+let lastStepTime = 0;
+
 // Keep the visible part of each image inside the CSS asset window.
 // Create the image and its wrapper together, so the same code can be reused for different
 // pencils and other assets.
@@ -309,6 +313,42 @@ function startAudio() {
             }
         });
 
+// Start the six-step loop after the first user interaction.
+        function startAudio() {
+            if (!audioContext) {
+                audioContext = new AudioContext();
+            }
+
+            if (audioContext.state === "suspended") {
+                audioContext.resume();
+            }
+
+            if (audioTimer !== null) return;
+
+            audioTimer = setInterval(() => {
+                if (audioContext.state !== "running") return;
+
+                // Read the current speed before playing the next step.
+                const now = performance.now();
+                if (now - lastStepTime < stepDuration) return;
+                lastStepTime = now;
+
+                slots.forEach((slot) => {
+                    if (
+                        Number(slot.dataset.step) === currentStep &&
+                        slot.dataset.pencil
+                    ) {
+                        playSound(
+                            slot.dataset.pencil,
+                            slot.dataset.length,
+                            currentStep
+                        );
+                    }
+                });
+
+                currentStep = (currentStep + 1) % 6;
+            }, 20);
+        }
         currentStep = (currentStep + 1) % 6;
     }, 250);
 }
@@ -383,3 +423,57 @@ function playSound(color, length, step, preview = false) {
         gain.disconnect();
     };
 }
+
+/* The marker follows the mouse while the ruler is being dragged.
+The music speed changes only when the mouse is released.
+This gives children time to choose a position before hearing it.*/
+const ruler = document.querySelector(".ruler-stage");
+let rulerDrag = null;
+
+function getRulerPosition(mouseX) {
+    const box = ruler.getBoundingClientRect();
+    const position = (mouseX - box.left) / box.width;
+    return Math.max(0, Math.min(1, position));
+}
+
+ruler.addEventListener("mousedown", (event) => {
+    if (event.button !== 0) return;
+
+    rulerDrag = {
+        startX: event.clientX,
+        moved: false
+    };
+
+    event.preventDefault();
+});
+
+document.addEventListener("mousemove", (event) => {
+    if (!rulerDrag) return;
+
+    // A small movement is still a click, not a ruler drag.
+    if (
+        !rulerDrag.moved &&
+        Math.abs(event.clientX - rulerDrag.startX) < 6
+    ) return;
+
+    rulerDrag.moved = true;
+
+    // Show the possible position, but do not change the sound yet.
+    const amount = getRulerPosition(event.clientX);
+    ruler.style.setProperty("--speed-position", `${amount * 100}%`);
+});
+
+document.addEventListener("mouseup", (event) => {
+    if (!rulerDrag) return;
+
+    if (rulerDrag.moved) {
+        const amount = getRulerPosition(event.clientX);
+
+        //Set the speed only when the drag is finished.
+        //Left = 400 ms, middle = 250 ms, right = 100 ms.
+        stepDuration = 400 - amount * 300;
+        ruler.style.setProperty("--speed-position", `${amount * 100}%`);
+    }
+
+    rulerDrag = null;
+});
