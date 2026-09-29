@@ -295,3 +295,11 @@ with the page. Clicking Start provides that first interaction.
     color: #553c4b;
     font: bold 1.1rem Arial, sans-serif;
 }
+
+/*Hover Lift
+A pencil moves slightly upward when the pointer enters it.
+This suggests that the pencil can be picked up and dragged.
+The movement is small so the pencil still appears to belong in its place inside the case.*/
+.pencil-button {
+    transition: transform 150ms ease, filter 150ms ease;
+}
