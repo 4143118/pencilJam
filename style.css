@@ -303,3 +303,9 @@ The movement is small so the pencil still appears to belong in its place inside 
 .pencil-button {
     transition: transform 150ms ease, filter 150ms ease;
 }
+
+/*add some effect*/
+.pencil-button:hover {
+    transform: translateY(-7px);
+    filter: drop-shadow(0 7px 4px rgba(75, 40, 45, 0.35));
+}
