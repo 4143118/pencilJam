@@ -306,3 +306,17 @@ with the page. Clicking Start provides that first interaction.
     filter: drop-shadow(0 0 2px white)
             drop-shadow(0 0 6px white);
 }
+/*Create a dot which shows position on the ruler controls the speed. */
+.ruler-stage::after {
+    position: absolute;
+    content: "";
+    left: var(--speed-position, 50%);
+    top: 18%;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgb(28, 74, 113);
+    border-radius: 50%;
+    background: #ffffff;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
