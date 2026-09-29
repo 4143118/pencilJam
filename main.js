@@ -39,7 +39,7 @@ let savedStepDuration = 250;
 let stepDuration = 250;
 let lastStepTime = 0;
 
-// Keep the visible part of each image inside the CSS asset window.
+// Keep the visible part of each image inside the css asset window.
 // Create the image and its wrapper together, so the same code can be reused for different
 // pencils and other assets.
 function makeAsset(className, imagePath) {
@@ -390,3 +390,47 @@ function playSound(color, length, step, preview = false) {
         gain.disconnect();
     };
 }
+//I use mousemove here to explore the spatial input tech.
+//Leaving the ruler restores the last clicked speed
+const ruler = document.querySelector(".ruler-stage");
+//Remember where the last confirmed speed is shown on the ruler.
+// the starting position is the middle, matching the starting speed
+let savedPosition = 50;
+ruler.style.setProperty("--speed-position", "50%");
+
+ruler.addEventListener("mousemove", (event) => {
+    //find how far the mouse is from the ruler's left edge
+    const box = ruler.getBoundingClientRect();
+    const position = (event.clientX - box.left) / box.width;
+    const amount = Math.max(0, Math.min(1, position));
+
+    //left = slow, right = fast
+    //this changes the sound now, but does not save the choice
+    stepDuration = 400 - amount * 300;
+    //Move the marker with mouse to show the speed being previewed
+    ruler.style.setProperty("--speed-position", `${amount * 100}%`);
+    ruler.classList.add("is-previewing");
+});
+
+ruler.addEventListener("mouseleave", () => {
+    //leaving without clicking cancels the preview
+    //restore both the saved sound speed and the marker position.
+    stepDuration = savedStepDuration;
+    ruler.style.setProperty("--speed-position", `${savedPosition}%`);
+    ruler.classList.remove("is-previewing");
+});
+
+ruler.addEventListener("click", (event) => {
+    //work out which speed the user chose by clicking the ruler
+    const box = ruler.getBoundingClientRect();
+    const position = (event.clientX - box.left) / box.width;
+    const amount = Math.max(0, Math.min(1, position));
+
+    //save the chosen speed and position
+    savedStepDuration = 400 - amount * 300;
+    savedPosition = amount * 100;
+    stepDuration = savedStepDuration;
+
+    ruler.style.setProperty("--speed-position", `${savedPosition}%`);
+    ruler.classList.remove("is-previewing");
+});
