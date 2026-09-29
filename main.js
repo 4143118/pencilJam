@@ -32,6 +32,10 @@ let audioContext = null;
 let audioTimer = null;
 let currentStep = 0;
 
+//The current time between two music steps.
+let stepDuration = 250;
+let lastStepTime = 0;
+
 // Keep the visible part of each image inside the CSS asset window.
 // Create the image and its wrapper together, so the same code can be reused for different
 // pencils and other assets.
@@ -282,25 +286,29 @@ document.addEventListener("pointercancel", endGesture);
  */
 
 //Start the six-step sound loop after the first user interaction.
+//I sorted out the code logic together with chatGPT, otherwise this will confuse me so much
 function startAudio() {
     if (!audioContext) {
         audioContext = new AudioContext();
     }
-
     if (audioContext.state === "suspended") {
         audioContext.resume();
     }
-
-    if (audioTimer !== null) return;
+    if (audioTimer !==null) return;
 
     audioTimer = setInterval(() => {
-        if (audioContext.state !== "running") return;
+        if (audioContext.state === "running") return;
+
+        //check the current ruler speed before playing the next step.
+        const now = performance.now();
+        if (now - performance.now() < stepDuration) return;
+        lastStepTime = now;
 
         slots.forEach((slot) => {
             if (
                 Number(slot.dataset.step) === currentStep &&
                 slot.dataset.pencil
-            ) {
+            ){
                 playSound(
                     slot.dataset.pencil,
                     slot.dataset.length,
@@ -310,7 +318,7 @@ function startAudio() {
         });
 
         currentStep = (currentStep + 1) % 6;
-    }, 250);
+    }, 20);
 }
 
 //Give each colour a different sound and each length a different volume.
