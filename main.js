@@ -295,11 +295,11 @@ function startAudio() {
     if (audioContext.state === "suspended") {
         audioContext.resume();
     }
-    if (audioTimee !== null) return;
+    if (audioTimer !== null) return;
     //Check the current speed repeatedly, so moving across the ruler
     //can preview a new tempo without restarting the music loop
     audioTimer = setInterval(() => {
-        if (audioContext.state === "running") return;
+        if (audioContext.state !== "running") return;
 
         const now = performance.now();
         if (now - lastStepTime < stepDuration) return;
