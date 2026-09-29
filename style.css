@@ -1,0 +1,297 @@
+/*The desk fills the screen. The pencil case and ruler sit above the
+/*music grid, so the grid has the most space for making music.*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* The game fills the browser window. The desk image sits behind
+   all the interactive objects. */
+.game {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #c79d73;
+}
+
+.desk-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* The positions of the case, ruler and grid are measured from
+   this full-screen stage. */
+.stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/*Image windows
+The generated images have transparent space around their drawings.
+JS puts each image inside an .asset element. The .asset hides that
+extra space without stretching the drawing.*/
+.asset {
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.asset img {
+    position: absolute;
+    display: block;
+    max-width: none;
+    height: auto;
+    pointer-events: none;
+}
+
+/* Show the visible part of the pencil case image. */
+.art-case {
+    width: 100%;
+    height: 100%;
+}
+
+.art-case img {
+    width: 133.91%;
+    left: -17%;
+    top: -5.79%;
+}
+
+/* Long and short pencils use the same image window. This keeps
+   their thickness consistent while showing their different lengths. */
+.art-pencil {
+    width: 100%;
+    aspect-ratio: 1956 / 190;
+}
+
+.art-pencil img {
+    width: 104.7%;
+    left: -2.45%;
+    top: -127.9%;
+}
+
+/* Show the ruler and its marks without the transparent edges. */
+.art-ruler {
+    width: 100%;
+    height: 100%;
+}
+
+.art-ruler img {
+    width: 106.39%;
+    left: -3.22%;
+    top: -56.96%;
+}
+
+/* The eraser drawing is horizontal in the PNG. Its button will
+   be rotated below so it appears vertical in the pencil case. */
+.art-eraser {
+    width: 100%;
+    height: 100%;
+}
+
+.art-eraser img {
+    width: 142.35%;
+    left: -21.5%;
+    top: -57.3%;
+}
+
+/*Pencil case
+
+The case is centred above the grid. The pencils and eraser are
+separate buttons placed on top of the case image, because users
+need to click or drag them.
+ */
+
+.case-stage {
+    position: absolute;
+    left: 50%;
+    top: 3%;
+    width: 24%;
+    aspect-ratio: 1147 / 916;
+    transform: translateX(-50%);
+}
+
+/* The buttons must be positioned over the case image.
+   Without position: absolute, they move into the normal page layout. */
+.pencil-button,
+.eraser-button {
+    position: absolute;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    touch-action: none;
+}
+
+/* Make the image window created by JS fill each button.
+   This rule applies to the image window, not the whole button. */
+.pencil-button .asset,
+.eraser-button .asset {
+    width: 100%;
+    height: 100%;
+}
+
+/* Keep all three pencils inside the lower compartment of the case.
+   The gap between them makes each pencil easier to select. */
+.pencil-button {
+    left: 11%;
+    width: 68%;
+    aspect-ratio: 1956 / 190;
+}
+
+/*adjust space between them here*/
+.red-pencil {
+    top: 53%;
+}
+
+.yellow-pencil {
+    top: 63%;
+}
+
+.blue-pencil {
+    top: 73%;
+}
+
+/* The eraser is vertical and sits beside the pencils.
+   It is raised so its bottom stays inside the case. */
+.eraser-button {
+    left: 73%;
+    top: 61%;
+    width: 24%;
+    aspect-ratio: 1079 / 466;
+    transform: rotate(-90deg);
+}
+
+/*ruler
+The ruler is centred below the case and remains separate from it.
+The gap leaves space for a speed label in later prototypes.*/
+
+.ruler-stage {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 24%;
+    aspect-ratio: 1925 / 309;
+    transform: translateX(-50%);
+}
+
+/*Grids
+Six columns match the six steps played by the JS sound loop.
+Three rows give children space to combine different pencils.
+The grid is larger than the case because placing pencils is the
+main activity on this screen.*/
+
+.music-grid {
+    position: absolute;
+    left: 10%;
+    top: 55%;
+    width: 80%;
+    height: 38%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    column-gap: 1.2%;
+    row-gap: 3%;
+}
+
+/* A slightly darker centre makes each slot look like a shallow
+   space where a pencil can be placed. */
+.note-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    padding: 3px;
+    border: 2px solid rgba(92, 63, 45, 0.35);
+    border-radius: 12px;
+    background: rgba(99, 63, 38, 0.12);
+    box-shadow: inset 0 4px 8px rgba(73, 43, 25, 0.16);
+}
+
+/* JS adds .is-target to the slot currently under the dragged tool.
+   The colour shows where the pencil will be placed or erased. */
+.note-slot.is-target {
+    border-color: #8d55ad;
+    background: rgba(232, 197, 255, 0.55);
+}
+
+/* Keep a placed pencil inside its slot without stretching it. */
+.note-slot .art-pencil {
+    width: 95%;
+    height: auto;
+}
+
+/*drag image
+JS creates a temporary copy of the pencil or eraser during a drag.
+pointer-events: none allows JS to detect the slot underneath it*/
+
+.drag-pencil {
+    position: fixed;
+    z-index: 20;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/*JS sets the drag image's width to match the source button. */
+.drag-pencil .art-pencil {
+    width: 100%;
+}
+
+/* Give the dragged eraser the same vertical direction as the
+   eraser displayed in the case. */
+.drag-eraser {
+    transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.drag-eraser .art-eraser {
+    width: 100%;
+    aspect-ratio: 1079 / 466;
+}
+
+/*Intro dialogue
+I asked ChatGPT why pencil hover was silent when the page first opened.
+I learned that browsers may block Web Audio until the user interacts
+with the page. Clicking Start provides that first interaction.
+ */
+
+#intro-dialog {
+    width: min(420px, 85vw);
+    padding: 30px;
+    border: 3px solid #79556c;
+    border-radius: 20px;
+    background: #fff4e4;
+    color: #553c4b;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(42, 26, 30, 0.25);
+}
+
+#intro-dialog::backdrop {
+    background: rgba(39, 28, 28, 0.5);
+}
+
+#intro-dialog p {
+    margin: 0 0 22px;
+    font: 1.2rem/1.5 Arial, sans-serif;
+}
+
+#start-button {
+    padding: 10px 30px;
+    border: 2px solid #79556c;
+    border-radius: 20px;
+    background: #f4c17e;
+    color: #553c4b;
+    font: bold 1.1rem Arial, sans-serif;
+}

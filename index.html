@@ -1,0 +1,92 @@
+<!--
+Image assets: desk.png, eraser.png, pencil-case.png, ruler.png,
+and the red, yellow and blue pencil images (including short versions).
+Generated using ChatGPT by OpenAI (2026).
+Prompts requested matching illustrated stationery for Pencil Jam,
+with a separate ruler and a desk background without pencil slots.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pencil Jam</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+<!--I asked ChatGPT why pencil hover was silent when the page first opened. I learned
+that browsers may block Web Audio until the user clicks. The Start button gives
+the user that first interaction.
+-->
+<dialog id="intro-dialog">
+  <p>Let's make music! Pick a pencil and drag it into a square.</p>
+  <button id="start-button">Start</button>
+</dialog>
+<main class="game">
+
+  <!--Insert desk background img -->
+  <img class="desk-background" src="sources/desk.png" alt="">
+
+  <!--set up a stage for interaction -->
+  <div class="stage">
+
+    <!--Pencil case belong to background，so I use img tag here,
+     but pencils and eraser have their functions, so I use button here.-->
+    <section class="case-stage">
+      <img class="case-image" src="sources/pencil-case.png" alt="">
+
+      <button class="pencil-button red-pencil" data-pencil="red" aria-label="Red pencil">
+        <img src="sources/pencil-red.png" alt="">
+      </button>
+
+      <button class="pencil-button yellow-pencil" data-pencil="yellow" aria-label="Yellow pencil">
+        <img src="sources/pencil-yellow.png" alt="">
+      </button>
+
+      <button class="pencil-button blue-pencil" data-pencil="blue" aria-label="Blue pencil">
+        <img src="sources/pencil-blue.png" alt="">
+      </button>
+
+      <button class="eraser-button" id="eraser-button" aria-label="Eraser">
+        <img src="sources/eraser.png" alt="">
+      </button>
+    </section>
+
+<!--insert ruler img, ruler as speed control. And I will make some prototypes by using
+js and css on it, so I did not use button here.-->
+    <section class="ruler-stage">
+      <img class="ruler-image" src="sources/ruler.png" alt="Ruler">
+    </section>
+
+
+    <!--Music grid: 3 rows and 6 steps -->
+    <section class="music-grid">
+      <button class="note-slot" data-row="0" data-step="0" aria-label="Row 1, step 1, empty"></button>
+      <button class="note-slot" data-row="0" data-step="1" aria-label="Row 1, step 2, empty"></button>
+      <button class="note-slot" data-row="0" data-step="2" aria-label="Row 1, step 3, empty"></button>
+      <button class="note-slot" data-row="0" data-step="3" aria-label="Row 1, step 4, empty"></button>
+      <button class="note-slot" data-row="0" data-step="4" aria-label="Row 1, step 5, empty"></button>
+      <button class="note-slot" data-row="0" data-step="5" aria-label="Row 1, step 6, empty"></button>
+
+      <button class="note-slot" data-row="1" data-step="0" aria-label="Row 2, step 1, empty"></button>
+      <button class="note-slot" data-row="1" data-step="1" aria-label="Row 2, step 2, empty"></button>
+      <button class="note-slot" data-row="1" data-step="2" aria-label="Row 2, step 3, empty"></button>
+      <button class="note-slot" data-row="1" data-step="3" aria-label="Row 2, step 4, empty"></button>
+      <button class="note-slot" data-row="1" data-step="4" aria-label="Row 2, step 5, empty"></button>
+      <button class="note-slot" data-row="1" data-step="5" aria-label="Row 2, step 6, empty"></button>
+
+      <button class="note-slot" data-row="2" data-step="0" aria-label="Row 3, step 1, empty"></button>
+      <button class="note-slot" data-row="2" data-step="1" aria-label="Row 3, step 2, empty"></button>
+      <button class="note-slot" data-row="2" data-step="2" aria-label="Row 3, step 3, empty"></button>
+      <button class="note-slot" data-row="2" data-step="3" aria-label="Row 3, step 4, empty"></button>
+      <button class="note-slot" data-row="2" data-step="4" aria-label="Row 3, step 5, empty"></button>
+      <button class="note-slot" data-row="2" data-step="5" aria-label="Row 3, step 6, empty"></button>
+    </section>
+
+  </div>
+</main>
+</body>
+</html>
