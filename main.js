@@ -5,6 +5,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
 https://developer.mozilla.org/en-US/docs/Web/API/Element/pointerenter_event
 https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API
 https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay
+https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
  */
 
 //Intro dialog
@@ -31,6 +32,12 @@ let gesture = null;
 let audioContext = null;
 let audioTimer = null;
 let currentStep = 0;
+
+// The saved speed stays after the mouse leaves the ruler.
+// stepDuration can change temporarily while user previews a speed
+let savedStepDuration = 250;
+let stepDuration = 250;
+let lastStepTime = 0;
 
 // Keep the visible part of each image inside the CSS asset window.
 // Create the image and its wrapper together, so the same code can be reused for different
@@ -281,26 +288,27 @@ document.addEventListener("pointercancel", endGesture);
  * The eraser must also be dragged into a slot.
  */
 
-//Start the six-step sound loop after the first user interaction.
 function startAudio() {
     if (!audioContext) {
         audioContext = new AudioContext();
     }
-
     if (audioContext.state === "suspended") {
         audioContext.resume();
     }
-
-    if (audioTimer !== null) return;
-
+    if (audioTimee !== null) return;
+    //Check the current speed repeatedly, so moving across the ruler
+    //can preview a new tempo without restarting the music loop
     audioTimer = setInterval(() => {
-        if (audioContext.state !== "running") return;
+        if (audioContext.state === "running") return;
+
+        const now = performance.now();
+        if (now - lastStepTime < stepDuration) return;
+        lastStepTime = now;
 
         slots.forEach((slot) => {
-            if (
-                Number(slot.dataset.step) === currentStep &&
+            if (Number(slot.dataset.step) === currentStep &&
                 slot.dataset.pencil
-            ) {
+            ){
                 playSound(
                     slot.dataset.pencil,
                     slot.dataset.length,
@@ -308,9 +316,8 @@ function startAudio() {
                 );
             }
         });
-
         currentStep = (currentStep + 1) % 6;
-    }, 250);
+    },20);
 }
 
 //Give each colour a different sound and each length a different volume.
