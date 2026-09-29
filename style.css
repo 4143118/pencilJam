@@ -295,3 +295,18 @@ with the page. Clicking Start provides that first interaction.
     color: #553c4b;
     font: bold 1.1rem Arial, sans-serif;
 }
+
+/*White highlight
+
+A white highlight appears around the pencil on hover.
+The pencil stays in place, so this version uses brightness
+rather than movement to show that it can be interacted with.*/
+.pencil-button {
+    transition: filter 150ms ease;
+}
+
+.pencil-button:hover {
+    filter:
+            drop-shadow(0 0 2px white)
+            drop-shadow(0 0 6px white);
+}
