@@ -297,11 +297,13 @@ function startAudio() {
     if (audioTimer !==null) return;
 
     audioTimer = setInterval(() => {
-        if (audioContext.state === "running") return;
+        //debugging, I found out the music loop started failed
+        // Wait until the audio context is ready to play.
+        if (audioContext.state !== "running") return;
 
-        //check the current ruler speed before playing the next step.
+// Play the next step only after the selected time has passed.
         const now = performance.now();
-        if (now - performance.now() < stepDuration) return;
+        if (now - lastStepTime < stepDuration) return;
         lastStepTime = now;
 
         slots.forEach((slot) => {
