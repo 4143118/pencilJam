@@ -391,3 +391,23 @@ function playSound(color, length, step, preview = false) {
         gain.disconnect();
     };
 }
+
+/*The mouse's position on the ruler controls music speed.
+Moving right makes the music faster, and moving left makes it slower.*/
+const ruler = document.querySelector(".ruler-stage");
+
+ruler.addEventListener("mousemove", (event) => {
+
+    //Get the ruler's position and width on the screen
+    const box = ruler.getBoundingClientRect();
+    //Convert the mouse's distance from the ruler's left edge into a value
+    //from left to right
+    const position = (event.clientX - box.left) / box.width;
+
+    // Keep the position between left and right.
+    const amount = Math.max(0, Math.min(1, position));
+
+    // Left = 400 ms, middle = 250 ms, right = 100 ms.
+    stepDuration = 400 - amount * 300;
+    ruler.style.setProperty("--speed-position", `${amount * 100}%`);
+});
