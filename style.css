@@ -653,19 +653,38 @@ with the page. Clicking Start provides that first interaction.
    elements to keep the instrument visually grouped.
 */
 @media screen and (min-width: 1601px) {
+    .case-stage {
+        width: clamp(390px,19vw, 480px);
+    }
+
+    .speed-control {
+        width: clamp(680px, 37vw, 850px);
+    }
+
+    .speed-icon {
+        width: clamp(76px, 4vw, 92px);
+    }
 
     .music-grid {
         left: 50%;
-        width: min(80%, 1500px);
+        width: min(82%, 1700px);
         transform: translateX(-50%);
     }
 
+    .playback-button{
+        /*asked chatGPT*/
+        /*keep playback visually connected to the ruler*/
+        right: max(12%, calc((100vw - 1700px) / 2));
+        width: 76px;
+        height: 76px;
+    }
     .side-figure {
         width: min(22vw, 460px);
     }
 
     .game-logo {
         width: min(13vw, 210px);
+        right: 15%;
     }
 }
 
