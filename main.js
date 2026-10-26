@@ -32,6 +32,9 @@ let audioContext = null;
 let audioTimer = null;
 let currentStep = 0;
 
+//the time between two steps can be changed by the ruler
+let stepDuration = 250;
+
 // Keep the visible part of each image inside the CSS asset window.
 // Create the image and its wrapper together, so the same code can be reused for different
 // pencils and other assets.
@@ -281,7 +284,6 @@ document.addEventListener("pointercancel", endGesture);
  * The eraser must also be dragged into a slot.
  */
 
-//Start the six-step sound loop after the first user interaction.
 function startAudio() {
     if (!audioContext) {
         audioContext = new AudioContext();
@@ -293,6 +295,7 @@ function startAudio() {
 
     if (audioTimer !== null) return;
 
+    // Play each step using the speed selected on the ruler.
     audioTimer = setInterval(() => {
         if (audioContext.state !== "running") return;
 
@@ -310,9 +313,8 @@ function startAudio() {
         });
 
         currentStep = (currentStep + 1) % 6;
-    }, 250);
+    }, stepDuration);
 }
-
 //Give each colour a different sound and each length a different volume.
 //cuz this is the prototype stage, I just use code to make some noise
 //I will change it at the later stage
@@ -383,3 +385,65 @@ function playSound(color, length, step, preview = false) {
         gain.disconnect();
     };
 }
+
+/* The marker follows the mouse while the ruler is being dragged.
+The music speed changes only when the mouse is released.
+This gives children time to choose a position before hearing it.*/
+const ruler = document.querySelector(".ruler-stage");
+let rulerDrag = null;
+
+function getRulerPosition(mouseX) {
+    const box = ruler.getBoundingClientRect();
+    const position = (mouseX - box.left) / box.width;
+    return Math.max(0, Math.min(1, position));
+}
+
+ruler.addEventListener("mousedown", (event) => {
+    if (event.button !== 0) return;
+
+    rulerDrag = {
+        startX: event.clientX,
+        moved: false
+    };
+
+    event.preventDefault();
+});
+
+document.addEventListener("mousemove", (event) => {
+    if (!rulerDrag) return;
+
+    // A small movement is still a click, not a ruler drag.
+    if (
+        !rulerDrag.moved &&
+        Math.abs(event.clientX - rulerDrag.startX) < 6
+    ) return;
+
+    rulerDrag.moved = true;
+
+    // Show the possible position, but do not change the sound yet.
+    const amount = getRulerPosition(event.clientX);
+    ruler.style.setProperty("--speed-position", `${amount * 100}%`);
+});
+
+document.addEventListener("mouseup", (event) => {
+    if (!rulerDrag) return;
+
+    if (rulerDrag.moved) {
+        const amount = getRulerPosition(event.clientX);
+
+        //Set the speed only when the drag is finished.
+        //Left = 400 ms, middle = 250 ms, right = 100 ms.
+        stepDuration = 400 - amount * 300;
+        ruler.style.setProperty("--speed-position", `${amount * 100}%`);
+    }
+// The old interval keeps its original speed, so replace it.
+    clearInterval(audioTimer);
+    audioTimer = null;
+    startAudio();
+    rulerDrag = null;
+});
+
+// I used ChatGPT to help implement the ruler's speed control.
+// While debugging, I found that changing stepDuration alone did not
+// change the music's speed. setInterval keeps the delay it was created
+// with, so I clear the old loop and start a new one after releasing the ruler.
