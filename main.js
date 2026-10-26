@@ -13,7 +13,7 @@ const startButton = document.querySelector("#start-button");
 introDialog.showModal();
 
 startButton.addEventListener("click", () => {
-    startAudio();
+    unlockAudio();
     introDialog.close();
 });
 
@@ -96,6 +96,11 @@ function togglePencil(button) {
 function placePencil(slot, color, length) {
     // Copy the pencil, leaving the original in the case.
     renderPencil(slot, color, length);
+
+    //start playback when the first pencil is placed
+    if (audioTimer === null) {
+        startAudio();
+    }
 }
 
 function eraseSlot(slot) {
@@ -117,7 +122,7 @@ function eraseSlot(slot) {
 function beginGesture(event, source, tool) {
     if (gesture || event.button !== 0) return;
 
-    startAudio();
+    unlockAudio();
 
     gesture = {
         source,
@@ -278,7 +283,8 @@ document.addEventListener("pointercancel", endGesture);
  * The eraser must also be dragged into a slot.
  */
 
-function startAudio() {
+// Prepare audio without starting the music loop.
+function unlockAudio() {
     if (!audioContext) {
         audioContext = new AudioContext();
     }
@@ -286,9 +292,13 @@ function startAudio() {
     if (audioContext.state === "suspended") {
         audioContext.resume();
     }
+}
+
+// Start the music loop when needed.
+function startAudio() {
+    unlockAudio();
 
     if (audioTimer !== null) return;
-
     // Play each step using the speed selected on the ruler.
     audioTimer = setInterval(() => {
         if (audioContext.state !== "running") return;
