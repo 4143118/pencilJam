@@ -322,3 +322,13 @@ with the page. Clicking Start provides that first interaction.
     filter: drop-shadow(0 0 2px white)
             drop-shadow(0 0 6px white);
 }
+/*same effect on eraser button*/
+.eraser-button {
+    transition: transform 500ms ease, filter 500ms ease;
+}
+
+.eraser-button:hover {
+    transform: translateY(-7px);
+    filter: drop-shadow(0 0 2px white)
+    drop-shadow(0 0 6px white);
+}
