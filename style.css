@@ -340,6 +340,26 @@ with the page. Clicking Start provides that first interaction.
     line-height: 1.4;
     color: #8c6a67;
 }
+.intro-subtitle-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.intro-girl {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
+    user-select: none;
+    pointer-events: none;
+}
+
+.intro-subtitle {
+    text-align: center;
+}
 
 .intro-instructions {
     width: 100%;
