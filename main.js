@@ -59,12 +59,6 @@ function makePencil(color, length = "long") {
 }
 
 //Replace the original images with asset windows to remove transparent space.
-document.querySelector(".case-image").replaceWith(
-    makeAsset("art-case", "sources/pencil-case.png")
-);
-document.querySelector(".ruler-image").replaceWith(
-    makeAsset("art-ruler", "sources/ruler.png")
-);
 eraserButton.replaceChildren(
     makeAsset("art-eraser", "sources/eraser.png")
 );

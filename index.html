@@ -38,7 +38,10 @@ the user that first interaction.
 <!--    Someone gave me a feedback: there is a bug here, sometimes this img can be dragged.
         I think the reason is browser native image drag.-->
     <section class="case-stage">
-      <img class="case-image" src="sources/pencil-case.png" alt="" draggable="false">
+<!--      use html to manage static img-->
+      <span class="asset art-case">
+         <img src="sources/pencil-case.png" alt="" draggable="false">
+      </span>
 
       <button class="pencil-button red-pencil" data-pencil="red" aria-label="Red pencil">
         <img src="sources/pencil-red.png" alt="">
@@ -59,8 +62,11 @@ the user that first interaction.
 
 <!--insert ruler img, ruler as speed control. And I will make some prototypes by using
 js and css on it, so I did not use button here.-->
+<!--    html manage it instead of js-->
     <section class="ruler-stage">
-      <img class="ruler-image" src="sources/ruler.png" alt="Ruler">
+      <span class="asset art-ruler">
+        <img src="sources/ruler.png" alt="Ruler" draggable="false">
+      </span>
     </section>
 
 
