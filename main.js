@@ -38,6 +38,7 @@ playbackButton.addEventListener("click", () => {
     } else {
         //Replay the melody from the first step
         currentStep = 0;
+        highlightStep(0);
         startAudio();
 
         icon.classList.remove("is-play");
