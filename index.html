@@ -35,8 +35,10 @@ the user that first interaction.
 
     <!--Pencil case belong to background，so I use img tag here,
      but pencils and eraser have their functions, so I use button here.-->
+<!--    Someone gave me a feedback: there is a bug here, sometimes this img can be dragged.
+        I think the reason is browser native image drag.-->
     <section class="case-stage">
-      <img class="case-image" src="sources/pencil-case.png" alt="">
+      <img class="case-image" src="sources/pencil-case.png" alt="" draggable="false">
 
       <button class="pencil-button red-pencil" data-pencil="red" aria-label="Red pencil">
         <img src="sources/pencil-red.png" alt="">
