@@ -332,3 +332,29 @@ with the page. Clicking Start provides that first interaction.
     filter: drop-shadow(0 0 2px white)
     drop-shadow(0 0 6px white);
 }
+
+/*Playback control */
+.playback-button {
+    position: absolute;
+    top: 45%;
+    right: 10%;
+    width: 56px;
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #79556c;
+    border-radius: 50%;
+    background: #fff4e4;
+    color: #553c4b;
+
+    font-size: 25px;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.playback-button:hover {
+    background: #f4c17e;
+}

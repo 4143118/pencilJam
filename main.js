@@ -21,6 +21,27 @@ startButton.addEventListener("click", () => {
 const pencilButtons = document.querySelectorAll(".pencil-button");
 const slots = document.querySelectorAll(".note-slot");
 const eraserButton = document.querySelector("#eraser-button");
+const playbackButton = document.querySelector("#playback-button");
+
+// Playback control is unavailable until the first pencil is placed.
+playbackButton.disabled = true;
+playbackButton.addEventListener("click", () => {
+    if (audioTimer !== null) {
+        // Pause the music loop.
+        clearInterval(audioTimer);
+        audioTimer = null;
+
+        playbackButton.querySelector(".playback-icon").textContent = "▶";
+        playbackButton.setAttribute("aria-label", "Replay music");
+    } else {
+        // Replay the melody from the first step.
+        currentStep = 0;
+        startAudio();
+
+        playbackButton.querySelector(".playback-icon").textContent = "⏸";
+        playbackButton.setAttribute("aria-label", "Pause music");
+    }
+});
 
 //A small movement is a click, moving more than 6 pixels starts a drag.
 const dragThreshold = 6;
@@ -93,12 +114,15 @@ function togglePencil(button) {
     );
 }
 
+//if user puts new pencil to grid after they stopped the music track, audio still disabled
 function placePencil(slot, color, length) {
     // Copy the pencil, leaving the original in the case.
     renderPencil(slot, color, length);
 
-    //start playback when the first pencil is placed
-    if (audioTimer === null) {
+    // Only the first pencil placement starts playback automatically.
+    if (playbackButton.disabled) {
+        playbackButton.disabled = false;
+        currentStep = 0;
         startAudio();
     }
 }
