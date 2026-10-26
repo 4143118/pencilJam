@@ -26,19 +26,22 @@ const playbackButton = document.querySelector("#playback-button");
 // Playback control is unavailable until the first pencil is placed.
 playbackButton.disabled = true;
 playbackButton.addEventListener("click", () => {
+    const icon = playbackButton.querySelector(".playback-icon");
     if (audioTimer !== null) {
-        // Pause the music loop.
+        // Pause the music loop
         clearInterval(audioTimer);
         audioTimer = null;
 
-        playbackButton.querySelector(".playback-icon").textContent = "▶";
+        icon.classList.remove("is-pause");
+        icon.classList.add("is-play");
         playbackButton.setAttribute("aria-label", "Replay music");
     } else {
-        // Replay the melody from the first step.
+        //Replay the melody from the first step
         currentStep = 0;
         startAudio();
 
-        playbackButton.querySelector(".playback-icon").textContent = "⏸";
+        icon.classList.remove("is-play");
+        icon.classList.add("is-pause");
         playbackButton.setAttribute("aria-label", "Pause music");
     }
 });

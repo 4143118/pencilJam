@@ -333,28 +333,70 @@ with the page. Clicking Start provides that first interaction.
     drop-shadow(0 0 6px white);
 }
 
-/*Playback control */
+/*playback control */
 .playback-button {
     position: absolute;
     top: 45%;
     right: 10%;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border: 2px solid #79556c;
+    border: 3px solid #79556c;
     border-radius: 50%;
     background: #fff4e4;
-    color: #553c4b;
-
-    font-size: 25px;
     cursor: pointer;
     z-index: 5;
 }
 
 .playback-button:hover {
     background: #f4c17e;
+}
+
+.playback-button:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.playback-icon {
+    position: relative;
+    display: block;
+    width: 28px;
+    height: 28px;
+}
+
+/*Play icon */
+.playback-icon.is-play::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 3px;
+    width: 0;
+    height: 0;
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+    border-left: 18px solid #553c4b;
+}
+
+/*Pause icon */
+.playback-icon.is-pause::before,
+.playback-icon.is-pause::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    width: 6px;
+    height: 22px;
+    background: #553c4b;
+    border-radius: 1px;
+}
+
+.playback-icon.is-pause::before {
+    left: 7px;
+}
+
+.playback-icon.is-pause::after {
+    right: 7px;
 }
