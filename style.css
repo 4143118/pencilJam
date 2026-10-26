@@ -558,3 +558,115 @@ with the page. Clicking Start provides that first interaction.
     user-select: none;
     z-index: 2;
 }
+
+
+   /*Responsive /adaptive design*/
+   /*The large desktop layout is the default design.*/
+/* Medium 768 * 1024
+   Reduce decorative elements and give the music grid more space, so pencils remain easy to drag and place.
+*/
+@media screen and (max-width: 839px) {
+    /*small adjustment*/
+    /*bring the main controls closer together so the music grid remains the focus on narrow screens.*/
+    .case-stage {
+        top:4%;
+        width: clamp(190px, 30vw, 240px);
+    }
+
+    .speed-control {
+        top: 37%;
+        width: min(400px, 72vw);
+        gap: 8px;
+    }
+
+    .speed-icon {
+        width: clamp(32px, 5vw, 42px);
+    }
+
+    .music-grid {
+        left: 4%;
+        top: 48%;
+        width: 92%;
+        height: 46%;
+        column-gap: 1%;
+        row-gap: 2%;
+    }
+
+    .side-figure {
+        left: -3%;
+        top: 12%;
+        width: clamp(110px, 19vw, 150px);
+    }
+
+    .game-logo {
+        right: 3%;
+        top: 5%;
+        width: clamp(95px, 17vw, 140px);
+    }
+
+    .playback-button {
+        right: 4%;
+        top: 39%;
+        width: 52px;
+        height: 52px;
+    }
+}
+
+/* Expanded 1024 * 896
+   Keep the same composition with smaller decorations and wider note slots for comfortable interaction.
+*/
+@media screen and (min-width: 840px) and (max-width: 1199px) {
+    .side-figure {
+        left: -3%;
+        width: clamp(150px, 18vw, 215px);
+    }
+
+    .game-logo {
+        width: clamp(115px, 14vw, 165px);
+        right: 5%;
+    }
+
+    .music-grid {
+        left: 7%;
+        width: 86%;
+    }
+
+    .playback-button {
+        right: 6%;
+        width: 58px;
+        height: 58px;
+    }
+}
+
+/* large 1440 * 900
+   Use the original layout without extra overrides.
+*/
+
+
+/* extra-large 2560 * 1440
+   Limit the growth of interactive and decorative
+   elements to keep the instrument visually grouped.
+*/
+@media screen and (min-width: 1601px) {
+
+    .music-grid {
+        left: 50%;
+        width: min(80%, 1500px);
+        transform: translateX(-50%);
+    }
+
+    .side-figure {
+        width: min(22vw, 460px);
+    }
+
+    .game-logo {
+        width: min(13vw, 210px);
+    }
+}
+
+/* Reduce the pencil case size when vertical space is limited, avoiding overlap with the speed control.*/
+@media screen and (min-width: 840px) and (max-height: 760px) {
+    .case-stage {
+        width: min(24vw, 31vh);
+    }
+}
