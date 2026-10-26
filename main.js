@@ -17,6 +17,7 @@ startButton.addEventListener("click", () => {
     introDialog.close();
 
 //Introduce the main interaction after entering the game.
+    //I just use code to generate a voice, cuz I couldn't find a satisfied free voice tool.
 speakOnce("intro", "Let's put a pencil in a square.");
 });
 
