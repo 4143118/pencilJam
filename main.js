@@ -512,6 +512,8 @@ document.addEventListener("mousemove", (event) => {
     ruler.style.setProperty("--speed-position", `${amount * 100}%`);
 });
 
+//Debug: Apply the ruler's new speed only after the drag ends.
+// a paused instrument must stay paused when its speed changes
 document.addEventListener("mouseup", (event) => {
     if (!rulerDrag) return;
 
@@ -522,11 +524,15 @@ document.addEventListener("mouseup", (event) => {
         //Left = 400 ms, middle = 250 ms, right = 100 ms.
         stepDuration = 400 - amount * 300;
         ruler.style.setProperty("--speed-position", `${amount * 100}%`);
-    }
 // The old interval keeps its original speed, so replace it.
-    clearInterval(audioTimer);
-    audioTimer = null;
-    startAudio();
+    //Restart the timer only if music was already playing.
+    //setInterval does not update its delay automatically
+    if (audioTimer !== null) {
+        clearInterval(audioTimer);
+        audioTimer = null;
+        startAudio();
+    }
+}
     rulerDrag = null;
 });
 
