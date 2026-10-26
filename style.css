@@ -616,6 +616,10 @@ with the page. Clicking Start provides that first interaction.
    Keep the same composition with smaller decorations and wider note slots for comfortable interaction.
 */
 @media screen and (min-width: 840px) and (max-width: 1199px) {
+    /*adjustment media query*/
+    .speed-control {
+        top: 37%;
+    }
     .side-figure {
         left: -3%;
         width: clamp(150px, 18vw, 215px);
@@ -632,6 +636,7 @@ with the page. Clicking Start provides that first interaction.
     }
 
     .playback-button {
+        top: 39%;
         right: 6%;
         width: 58px;
         height: 58px;
