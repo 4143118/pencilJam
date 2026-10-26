@@ -531,3 +531,30 @@ with the page. Clicking Start provides that first interaction.
             inset 0 0 12px rgba(255, 209, 100, 0.35),
             0 0 10px rgba(255, 209, 100, 0.4);
 }
+
+/* decorations */
+.side-figure {
+    position: absolute;
+    left: -3%;
+    top: 10%;
+
+    width: clamp(320px,28vw, 460px);
+    height: auto;
+
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+}
+
+.game-logo {
+    position: absolute;
+    right: 9%;
+    top: 3%;
+
+    width: clamp(100px, 13vw, 210px);
+    height: auto;
+
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+}
