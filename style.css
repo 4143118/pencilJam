@@ -688,9 +688,3 @@ with the page. Clicking Start provides that first interaction.
     }
 }
 
-/* Reduce the pencil case size when vertical space is limited, avoiding overlap with the speed control.*/
-@media screen and (min-width: 840px) and (max-height: 760px) {
-    .case-stage {
-        width: min(24vw, 31vh);
-    }
-}
