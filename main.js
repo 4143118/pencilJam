@@ -15,6 +15,9 @@ introDialog.showModal();
 startButton.addEventListener("click", () => {
     unlockAudio();
     introDialog.close();
+
+//Introduce the main interaction after entering the game.
+speakOnce("intro", "Let's put a pencil in a square.");
 });
 
 //Find elements
@@ -22,6 +25,34 @@ const pencilButtons = document.querySelectorAll(".pencil-button");
 const slots = document.querySelectorAll(".note-slot");
 const eraserButton = document.querySelector("#eraser-button");
 const playbackButton = document.querySelector("#playback-button");
+
+// voice guidance is limited to one trigger per event. This prevents repeated speech
+// from interrupting music exploration
+const voicePlayed ={
+    intro: false,
+    encouragement: false,
+    paused: false,
+};
+
+let placedPencilCount = 0;
+
+//Voice Encouragement was too unfamiliar and hard for me, so I seeked help from chatGPT.
+// Speak only when no other guidance is being spoken.
+function speakOnce(type, message) {
+    if (voicePlayed[type]) return;
+    if (!("speechSynthesis" in window)) return;
+    if (window.speechSynthesis.speaking ||
+        window.speechSynthesis.pending) return;
+
+    const speech = new SpeechSynthesisUtterance(message);
+    speech.lang = "en-US";
+    speech.rate = 0.9;
+    speech.pitch = 1.15;
+    speech.volume = 0.7;
+
+    voicePlayed[type] = true;
+    window.speechSynthesis.speak(speech);
+}
 
 // Playback control is unavailable until the first pencil is placed.
 playbackButton.disabled = true;
@@ -35,6 +66,9 @@ playbackButton.addEventListener("click", () => {
         icon.classList.remove("is-pause");
         icon.classList.add("is-play");
         playbackButton.setAttribute("aria-label", "Replay music");
+
+        //offer a new idea only on the first pause.
+        speakOnce("pause", "Try making a new tune.");
     } else {
         //Replay the melody from the first step
         currentStep = 0;
@@ -128,10 +162,19 @@ function togglePencil(button) {
 
 //if user puts new pencil to grid after they stopped the music track, audio still disabled
 function placePencil(slot, color, length) {
-    // Copy the pencil, leaving the original in the case.
+    // Count only placements into previously empty slots.
+    const wasEmpty = !slot.dataset.pencil;
     renderPencil(slot, color, length);
 
-    // Only the first pencil placement starts playback automatically.
+    if (wasEmpty) {
+        placedPencilCount++;
+        // Encourage the child once after four successful placements.
+        if (placedPencilCount === 4) {
+            speakOnce("encouragement", "That sounds lovely!");
+        }
+    }
+
+    // Keep the existing first-placement playback behaviour.
     if (playbackButton.disabled) {
         playbackButton.disabled = false;
         currentStep = 0;
