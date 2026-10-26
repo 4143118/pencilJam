@@ -400,3 +400,12 @@ with the page. Clicking Start provides that first interaction.
 .playback-icon.is-pause::after {
     right: 7px;
 }
+
+/* Highlight the column currently being played */
+.note-slot.is-playing {
+    background: rgba(251, 226, 158, 0.45);
+    border-color: #f8f0dc;
+    box-shadow:
+            inset 0 0 12px rgba(255, 209, 100, 0.35),
+            0 0 10px rgba(255, 209, 100, 0.4);
+}

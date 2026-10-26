@@ -56,6 +56,14 @@ let audioContext = null;
 let audioTimer = null;
 let currentStep = 0;
 
+// Highlight the column that is currently playing
+function highlightStep(step) {
+    slots.forEach((slot) => {
+        const isCurrentStep = Number(slot.dataset.step) === step;
+        slot.classList.toggle("is-playing", isCurrentStep);
+    });
+}
+
 //the time between two steps can be changed by the ruler
 let stepDuration = 250;
 
@@ -329,6 +337,9 @@ function startAudio() {
     // Play each step using the speed selected on the ruler.
     audioTimer = setInterval(() => {
         if (audioContext.state !== "running") return;
+
+        //update the visual feedback with the current music step.
+        highlightStep(currentStep);
 
         slots.forEach((slot) => {
             if (
