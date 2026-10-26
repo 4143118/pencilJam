@@ -16,14 +16,27 @@ with a separate ruler and a desk background without pencil slots.
   <script src="main.js" defer></script>
 </head>
 
+
 <body>
 <!--I asked ChatGPT why pencil hover was silent when the page first opened. I learned
 that browsers may block Web Audio until the user clicks. The Start button gives
 the user that first interaction.
 -->
-<dialog id="intro-dialog">
-  <p>Let's make music! Pick a pencil and drag it into a square.</p>
-  <button id="start-button">Start</button>
+<dialog id="intro-dialog" aria-labelledby="intro-title">
+    <div class="intro-content">
+        <h1 id="intro-title">Welcome to Pencil Jam!</h1>
+        <p class="intro-subtitle">Let's make some music!</p>
+
+        <div class="intro-instructions">
+            <p>Drag a pencil into the grid to make music</p>
+            <p>Click a pencil to change its volume</p>
+            <p>Drag the eraser to remove a note</p>
+            <p>Slide along the ruler to change the speed</p>
+        </div>
+
+        <p class="intro-ending">Ready? Let's jam!</p>
+        <button id="start-button" type="button">Play</button>
+    </div>
 </dialog>
 <main class="game">
 
