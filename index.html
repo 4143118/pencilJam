@@ -76,11 +76,19 @@ the user that first interaction.
 <!--insert ruler img, ruler as speed control. And I will make some prototypes by using
 js and css on it, so I did not use button here.-->
 <!--    html manage it instead of js-->
-    <section class="ruler-stage">
-      <span class="asset art-ruler">
-        <img src="sources/ruler.png" alt="Ruler" draggable="false">
-      </span>
-    </section>
+<!--    add turtle (low) and rabbit (fast) icon as an information design-->
+      <div class="speed-control">
+          <img class="speed-icon turtle-icon" src="sources/turtle.png" alt="Slow" draggable="false">
+
+          <section class="ruler-stage">
+        <span class="asset art-ruler">
+            <img src="sources/ruler.png" alt="Ruler" draggable="false">
+        </span>
+          </section>
+
+          <img class="speed-icon rabbit-icon" src="sources/rabbit.png" alt="Fast" draggable="false">
+
+      </div>
 
       <!--Playback control -->
       <button id="playback-button" class="playback-button" type="button" aria-label="Pause music">
